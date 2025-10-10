@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import RecoveryComponent from '@/components/MainView/RecoveryComponent.vue'
+  import RecoveryComponent from '@/components/MainView/RecoveryComponent.vue'
 </script>
 
 <template>

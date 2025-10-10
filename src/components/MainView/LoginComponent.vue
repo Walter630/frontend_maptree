@@ -1,18 +1,17 @@
 <template>
-  <v-container fluid class="login-container">
+  <v-container class="login-container" fluid>
     <v-row class="fill-height" style="margin: 0; padding: 0; height: 100vh;">
       <!-- Coluna do formulário -->
-      <v-col cols="12" md="4" class="form-section">
-        <v-card flat class="form-card">
+      <v-col class="form-section" cols="12" md="4">
+        <v-card class="form-card" flat>
           <!-- Logo -->
           <v-img
-
             alt="Logo"
-            max-width="10"
-            contain
             class="mb-4 mx-auto"
+            contain
+            max-width="10"
           />
-          <v-card-title class=" font-weight-bold text-h5 mb-4">
+          <v-card-title class="font-weight-bold text-h5 mb-4">
             MapTree
           </v-card-title>
 
@@ -21,62 +20,69 @@
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field
               v-model="username"
-              label="Email"
-              placeholder="Digite seu email"
-              outlined
-              dense
-              color="green"
               class="mb-4"
+              color="green"
+              dense
               hide-details
+              label="Email"
+              outlined
+              placeholder="Digite seu email"
               required
-            ></v-text-field>
+            />
 
             <v-text-field
               v-model="password"
-              :type="showPassword ? 'text' : 'password'"
-              label="Senha"
-              placeholder="Digite sua senha"
-              outlined
-              dense
-              color="green"
-              class="mb-2"
-              hide-details
-              required
               :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+              class="mb-2"
+              color="green"
+              dense
+              hide-details
+              label="Senha"
+              outlined
+              placeholder="Digite sua senha"
+              required
+              :type="showPassword ? 'text' : 'password'"
               @click:append="showPassword = !showPassword"
-            ></v-text-field>
+            />
 
-            <v-btn block color="#C6F513" dark class="mb-4" @click="login">
+            <v-btn
+              block
+              class="mb-4"
+              color="#C6F513"
+              dark
+              @click="login"
+            >
               ENTRAR
               <v-icon right>mdi-arrow-right</v-icon>
             </v-btn>
 
             <div class="text-left mb-2">
-              <a @click="$router.push('/recovery')" class="forgot-password">Esqueceu sua senha?</a>
+              <a class="forgot-password" @click="$router.push('/recovery')">Esqueceu sua senha?</a>
             </div>
 
-            <hr class="hr" />
+            <hr class="hr">
 
-            <!-- Botão Google com ícone colorido -->
+            <!-- Botão Google -->
             <v-btn block class="mb-2 google-btn" @click="loginWithGoogle">
               <img
-                src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="Google Icon"
-                width="24"
-                height="24"
                 class="mr-2"
-              />
+                height="24"
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                width="24"
+              >
               Continuar com Google
             </v-btn>
 
-            <v-btn block class="mb-2 facebook-btn" @click="loginWithFacebook">
-              <Icon icon="logos:facebook" width="22" height="22" class="mr-2" />
+            <v-btn block class="mb-2 facebook-btn" @click="loginFacebook">
+              <img class="mr-2" height="22" src="https://www.svgrepo.com/show/475656/facebook-color.svg" width="22">
               Continuar com Facebook
             </v-btn>
 
             <div class="text-center mt-4">
               Não possui uma conta?
-              <a href="#" class="register-link">Cadastre-se</a><v-icon color="blue">mdi-chevron-right</v-icon>
+              <a class="register-link" href="#">Cadastre-se</a>
+              <v-icon color="blue">mdi-chevron-right</v-icon>
             </div>
           </v-form>
 
@@ -89,44 +95,86 @@
       </v-col>
 
       <!-- Coluna direita -->
-      <v-col cols="12" md="8" class="info-section">
+      <v-col
+        class="info-section"
+        cols="12"
+        md="8"
+        :style="isMobile ? 'display: none;' : 'padding: 20px; text-align: center;'"
+      >
         <div class="info-text">
-          <h1>Gestão<br />inteligente de<br />vegetação</h1>
+          <h1>Gestão<br>inteligente de<br>vegetação</h1>
         </div>
         <div class="bottom-logo">MapTree</div>
       </v-col>
+
     </v-row>
   </v-container>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-import { Icon } from '@iconify/vue'
-import { useRouter } from 'vue-router'
+<script>
+  import { onAuthStateChanged } from 'firebase/auth'
+  import { auth, loginWithGooglePopup } from '@/plugins/firebase/config'
+  import { useAppStore } from '@/stores/app'
 
-const router = useRouter()
+  export default {
+    name: 'LoginComponent',
 
-const username = ref('')
-const password = ref('')
-const valid = ref(true)
-const showPassword = ref(false)
-const form = ref()
+    data () {
+      return {
+        username: '',
+        password: '',
+        showPassword: false,
+        valid: true,
+        isMobile: window.innerWidth < 768, // inicializa com largura atual
+      }
+    },
 
-const login = () => {
-  if (form.value?.validate()) {
-    alert('Login realizado com sucesso!')
-  } else {
-    alert('Por favor, preencha todos os campos corretamente.')
+    mounted () {
+      const store = useAppStore()
+
+      // Mantém sessão se já estiver logado
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          console.log('✅ Sessão restaurada:', user.email)
+          store.setUser(user)
+          this.$router.push('/')
+        } else {
+          console.log('🔴 Nenhum usuário autenticado.')
+        }
+      })
+
+      // Atualiza isMobile quando a tela é redimensionada
+      window.addEventListener('resize', this.checkMobile)
+    },
+
+    beforeUnmount () {
+      // Remove listener ao destruir o componente
+      window.removeEventListener('resize', this.checkMobile)
+    },
+
+    methods: {
+      async loginWithGoogle () {
+        try {
+          const user = await loginWithGooglePopup()
+          if (user) {
+            console.log('✅ Usuário logado:', user.email)
+            this.$store.setUser(user)
+            this.$router.push('/')
+          }
+        } catch (error) {
+          console.error('Erro ao logar com Google:', error)
+        }
+      },
+
+      loginFacebook () {
+        alert('Login com Facebook ainda não implementado.')
+      },
+
+      checkMobile () {
+        this.isMobile = window.innerWidth < 768
+      },
+    },
   }
-}
-
-const loginWithGoogle = () => {
-  alert('Login com Google')
-}
-
-const loginWithFacebook = () => {
-  alert('Login com Facebook')
-}
 </script>
 
 <style scoped>

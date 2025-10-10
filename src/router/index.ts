@@ -1,42 +1,97 @@
-/**
- * router/index.ts
- *
- * Automatic routes for `./src/pages/*.vue`
- */
-
-// Composables
 import { createRouter, createWebHistory } from 'vue-router'
-import { setupLayouts } from 'virtual:generated-layouts'
-import { routes } from 'vue-router/auto-routes'
+
+// Firebase Auth
+// import { onAuthStateChanged } from "firebase/auth";
+import MainComponent from '@/components/MainView/MainComponent'
+import MensageEmailComponent from '@/components/MainView/MensageEmailComponent'
+import LoginPage from '@/pages/LoginPage.vue'
+// Importação de Componentes de Rotas
+import MainPage from '@/pages/MainPage'
+
+import RecoveryPage from '@/pages/RecoveryPage.vue'
+
+// Store
+import { useAppStore } from '@/stores/app'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes),
+  routes: [
+    {
+      path: '/',
+      component: MainPage,
+      children: [
+        {
+          path: '',
+          name: 'Main',
+          component: MainComponent,
+          meta: { requiresAuth: true },
+        },
+        {
+          path: 'logout',
+          name: 'Logout',
+          component: MainComponent,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: 'login',
+          name: 'Login',
+          component: LoginPage,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: 'recovery',
+          name: 'recovery',
+          component: RecoveryPage,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: 'recovery-code',
+          name: 'recovery-code',
+          component: MensageEmailComponent,
+          meta: { requiresAuth: false },
+        },
+      ],
+    },
+  ],
 })
 
-router.addRoute({
-  path: '/recovery',
-  name: 'Recovery',
-  component: () => import('../pages/RecoveryPage.vue'),
-})
+// router.beforeEach((to, from, next) => {
+// localStorage.removeItem('user-data')
+// const store = useAppStore()
+// const auth = store.getAuthInstance
 
-// Workaround for https://github.com/vitejs/vite/issues/11804
-router.onError((err, to) => {
-  if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
-    if (localStorage.getItem('vuetify:dynamic-reload')) {
-      console.error('Dynamic import error, reloading page did not fix it', err)
-    } else {
-      console.log('Reloading page to fix dynamic import error')
-      localStorage.setItem('vuetify:dynamic-reload', 'true')
-      location.assign(to.fullPath)
-    }
-  } else {
-    console.error(err)
-  }
-})
+// let alreadyCalled = false // Controlador para evitar chamadas duplicadas
 
-router.isReady().then(() => {
-  localStorage.removeItem('vuetify:dynamic-reload')
-})
+// onAuthStateChanged(auth, (user) => {
+// if (alreadyCalled) return // Se já foi chamado, não continua
+// alreadyCalled = true // Marca como já chamado
+
+// if (user && to.matched.some((record) => record.meta.requiresAuth)) {
+//   // Usuário está logado e a rota requer autenticação
+//   next()
+// } else if (!user && to.matched.some((record) => record.meta.requiresAuth)) {
+//   // Usuário não está logado e a rota requer autenticação
+//  next({ name: 'Admin Login' })
+// } else {
+//   // Rota não requer autenticação
+//   next()
+// }
+// })
+// })
+
+// router.afterEach((to) => {
+// document.title = to.name.toString() + ' — MapTree'
+// const store = useAppStore()
+// setTimeout(() => {
+//  store.setLoadingPage(false)
+// }, 500)
+
+// setTimeout(() => {
+//   window.scrollTo({
+//    top: 0,
+// behavior: 'smooth'
+//   })
+// }, 600)
+// })
 
 export default router

@@ -1,5 +1,5 @@
 <template>
-    <LoginComponent />
+  <LoginComponent />
 </template>
 <script lang="ts" setup>
   // Import necessary modules and components
