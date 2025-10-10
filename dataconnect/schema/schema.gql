@@ -1,0 +1,49 @@
+type User @table {
+  displayName: String!
+  email: String!
+  role: String!
+  phoneNumber: String
+  photoUrl: String
+}
+
+type Tree @table {
+  latitude: Float!
+  longitude: Float!
+  identifier: String!
+  species: String!
+  createdAt: Timestamp!
+  circumference: Float
+  height: Float
+  healthStatus: String
+  notes: String
+  imageUrl: String
+}
+
+type PruningTask @table {
+  tree: Tree!
+  status: String!
+  scheduledDate: Date!
+  createdAt: Timestamp!
+  description: String
+  completionDate: Date
+  notes: String
+  assignedTo: User
+  imageUrls: [String]
+}
+
+type Zone @table {
+  name: String!
+  description: String!
+  createdAt: Timestamp!
+  polygonCoordinates: [String]
+  manager: User
+}
+
+type Report @table {
+  name: String!
+  reportType: String!
+  createdAt: Timestamp!
+  generatedBy: User
+  parameters: String
+  content: String
+}

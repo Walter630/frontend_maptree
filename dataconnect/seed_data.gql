@@ -1,0 +1,90 @@
+mutation CreateDemoData @auth(level: USER) @transaction {
+  user_insertMany(
+    data: [
+      {
+        id: "550e8400-e29b-41d4-a716-446655440000"
+        displayName: "demouser1"
+        email: "demouser1@example.com"
+        role: "member"
+      }
+      {
+        id: "550e8400-e29b-41d4-a716-446655440001"
+        displayName: "demouser2"
+        email: "demouser2@example.com"
+        role: "member"
+      }
+    ]
+  )
+  zone_insertMany(
+    data: [
+      {
+        id: "650e8400-e29b-41d4-a716-446655440000"
+        name: "demozone1"
+        description: "Example zone 1"
+        createdAt: "2024-04-24T12:00:00Z"
+        managerId: "550e8400-e29b-41d4-a716-446655440000"
+      }
+      {
+        id: "650e8400-e29b-41d4-a716-446655440001"
+        name: "demozone2"
+        description: "Example zone 2"
+        createdAt: "2024-04-24T12:00:00Z"
+        managerId: "550e8400-e29b-41d4-a716-446655440001"
+      }
+    ]
+  )
+  tree_insertMany(
+    data: [
+      {
+        id: "750e8400-e29b-41d4-a716-446655440000"
+        identifier: "tree1"
+        species: "Oak"
+        latitude: 37.7749
+        longitude: -122.4194
+        createdAt: "2024-04-24T12:00:00Z"
+      }
+      {
+        id: "750e8400-e29b-41d4-a716-446655440001"
+        identifier: "tree2"
+        species: "Redwood"
+        latitude: 34.0522
+        longitude: -118.2437
+        createdAt: "2024-04-24T12:00:00Z"
+      }
+    ]
+  )
+  pruningTask_insertMany(
+    data: [
+      {
+        treeId: "750e8400-e29b-41d4-a716-446655440000"
+        scheduledDate: "2024-05-01"
+        status: "pending"
+        createdAt: "2024-04-24T12:00:00Z"
+        description: "Prune tree1"
+      }
+      {
+        treeId: "750e8400-e29b-41d4-a716-446655440001"
+        scheduledDate: "2024-05-01"
+        status: "pending"
+        createdAt: "2024-04-24T12:00:00Z"
+        description: "Prune tree2"
+      }
+    ]
+  )
+  report_insertMany(
+    data: [
+      {
+        name: "report1"
+        reportType: "health"
+        createdAt: "2024-04-24T12:00:00Z"
+        generatedById: "550e8400-e29b-41d4-a716-446655440000"
+      }
+      {
+        name: "report2"
+        reportType: "growth"
+        createdAt: "2024-04-24T12:00:00Z"
+        generatedById: "550e8400-e29b-41d4-a716-446655440001"
+      }
+    ]
+  )
+}
