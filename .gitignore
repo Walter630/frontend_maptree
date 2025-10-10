@@ -43,6 +43,31 @@ pnpm-debug.log*
 /functions/node_modules
 /functions/package-lock.json
 /functions/package.json
+/functions/src/dataconnect-generated
+/functions/src/dataconnect-generated/esm
+/functions/src/dataconnect-generated/lib
+/functions/src/dataconnect-generated/src
+/functions/src/dataconnect-generated/types
+/functions/src/dataconnect-generated/package.json
+/firebase/index.ts
+/firebase/index.d.ts
+/firebase/package.json
+/firebase/package-lock.json
+/firebase/src
+/firebase/src/dataconnect-generated
+/firebase/src/dataconnect-generated/esm
+/firebase/src/dataconnect-generated/lib
+/firebase/src/dataconnect-generated/src
+/firebase/src/dataconnect-generated/types
+/firebase/src/dataconnect-generated/package.json
+/firebase/src/dataconnect-generated/esm/package.json
+/firebase/src/dataconnect-generated/lib/package.json
+/firebase/src/dataconnect-generated/src/package.json
+/firebase/src/dataconnect-generated/types/package.json
+/firebase/src/dataconnect-generated/esm/index.esm.js
+/firebase/src/dataconnect-generated/lib/index.cjs.js
+/firebase/src/dataconnect-generated/src/index.ts
+/firebase/src/dataconnect-generated/types/index.d.ts
 
 # -------------------------
 # IDEs / Editors
