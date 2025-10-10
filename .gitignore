@@ -41,6 +41,8 @@ pnpm-debug.log*
 /firebase.json
 .firebaserc
 /functions/node_modules
+/functions/package-lock.json
+/functions/package.json
 
 # -------------------------
 # IDEs / Editors
@@ -95,3 +97,4 @@ $RECYCLE.BIN/
 *.pid
 *.seed
 *.seed.*
+
