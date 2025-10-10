@@ -10,13 +10,12 @@ import {
 import { useAppStore } from '@/stores/app'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyClC7aCDlXZA12L1a9JcjWOgd5-W6LKs3M',
-  authDomain: 'maptree-f825f.firebaseapp.com',
-  projectId: 'maptree-f825f',
-  storageBucket: 'maptree-f825f.appspot.com',
-  messagingSenderId: '447838904319',
-  appId: '1:447838904319:web:e733509723a29e726dd1ca',
-  measurementId: 'G-XJ37QT4RF1',
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 }
 
 const app = initializeApp(firebaseConfig)
